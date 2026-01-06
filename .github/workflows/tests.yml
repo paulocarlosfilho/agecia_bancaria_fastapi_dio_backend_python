@@ -10,10 +10,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
 
-    services:
-      # Se usássemos um banco externo como Postgres, ele viria aqui.
-      # Como usamos SQLite, não precisamos de serviço extra.
-      
     steps:
     - uses: actions/checkout@v3
     
