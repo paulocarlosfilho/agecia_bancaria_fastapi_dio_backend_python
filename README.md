@@ -122,22 +122,38 @@ Se você tiver o Docker instalado, pode subir o sistema completo sem precisar co
 
 ---
 
-## 🏗️ Arquitetura do Projeto
+## 🏗️ Arquitetura & Padrões de Projeto
 
+O projeto adota uma arquitetura modular baseada em **Camadas (Layered Architecture)** e o padrão **Service Layer**, garantindo que a regra de negócio seja independente do framework web.
+
+### **As Camadas do Sistema**
+*   **Camada de Entrada (API Endpoints)**: Localizada em `app/api/`, gerencia apenas as requisições HTTP, validações de contrato (Pydantic) e respostas. Não contém lógica de negócio.
+*   **Camada de Serviço (Service Layer)**: Em `app/services/`, reside o "coração" do sistema. Aqui estão as regras de transferências, cálculos de saldo e validações bancárias. É 100% isolada e testável.
+*   **Camada de Dados (Models & DB)**: Utiliza **SQLAlchemy 2.0** com sessões assíncronas. Os modelos em `app/models/` definem a estrutura do banco, enquanto `app/db/` gerencia a conexão.
+*   **Camada de Esquemas (Schemas)**: Contratos de dados robustos usando **Pydantic v2**, garantindo que nenhum dado inválido entre ou saia da API.
+*   **Camada de Segurança (Core)**: Centraliza a lógica de autenticação JWT, hashing de senhas com bcrypt e configurações globais.
+
+### **Fluxo de uma Requisição (Exemplo: Transferência)**
+1.  **Client**: Envia um POST para `/api/v1/banking/transfer`.
+2.  **Route**: Valida o token JWT e o formato do JSON de entrada.
+3.  **Service**: Inicia uma transação atômica, verifica saldos, aplica regras de limites e executa a operação.
+4.  **Database**: Persiste as alterações de saldo e registra o extrato de forma assíncrona.
+5.  **Response**: Retorna sucesso ou erro formatado via Global Exception Handler.
+
+### **Estrutura de Diretórios**
 ```text
 ├── app/
-│   ├── api/            # Endpoints da API (v1) organizados por módulos
-│   ├── core/           # Configurações de segurança (JWT, Hashing)
-│   ├── db/             # Engine e Sessão assíncrona do Banco de Dados
-│   ├── models/         # Modelos de dados (User, Account, Transaction)
-│   ├── schemas/        # Contratos de entrada/saída (Pydantic)
-│   ├── services/       # Service Layer (Onde reside a regra de negócio)
-│   ├── static/         # Assets estáticos (CSS customizado, JS modular)
-│   └── templates/      # Templates HTML organizados por contextos (Auth, Dashboard)
-├── tests/              # Testes de integração automatizados
-├── main.py             # Configuração do App e Injeção de dependências
-├── Makefile            # Comandos de automação do projeto
-└── requirements.txt    # Lista rigorosa de dependências
+│   ├── api/            # Endpoints (v1) e Injeção de Dependências
+│   ├── core/           # Segurança (JWT), Configurações e Logs
+│   ├── db/             # Conexão assíncrona com SQLite/aiosqlite
+│   ├── models/         # Modelos de dados do SQLAlchemy
+│   ├── schemas/        # Modelos Pydantic (Data Transfer Objects)
+│   ├── services/       # Regras de Negócio (Service Layer)
+│   ├── static/         # Frontend: CSS (Tailwind) e JS (Modular)
+│   └── templates/      # Interface: Jinja2 estruturado por módulos
+├── tests/              # Testes de integração e fluxo ponta-a-ponta
+├── main.py             # Entry point e Handlers de Erros Globais
+└── Makefile            # Orquestração de tarefas e automação
 ```
 
 ---
