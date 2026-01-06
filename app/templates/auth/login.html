@@ -31,8 +31,6 @@
         <div class="mt-6 text-center">
             <p class="text-sm text-gray-600">Não tem uma conta? <a href="/register" class="text-blue-600 font-bold">Cadastre-se</a></p>
         </div>
-        
-        <div id="error-msg" class="mt-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm hidden"></div>
     </div>
 </div>
 {% endblock %}
@@ -55,12 +53,10 @@
                 API.setToken(data.access_token);
                 window.location.href = '/dashboard';
             } else {
-                const errDiv = document.getElementById('error-msg');
-                errDiv.textContent = data.detail || 'Erro ao entrar';
-                errDiv.classList.remove('hidden');
+                API.showToast(data.detail || 'E-mail ou senha incorretos');
             }
         } catch (err) {
-            alert('Erro de conexão');
+            API.showToast('Erro de conexão com o servidor');
         }
     };
 </script>

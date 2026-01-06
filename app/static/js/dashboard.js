@@ -128,9 +128,10 @@ const Dashboard = {
                 body: JSON.stringify({ account_type: type })
             });
             this.hideCreateModal();
+            API.showToast('Conta criada com sucesso!', 'success');
             await this.refresh();
         } catch (err) {
-            alert(err.message);
+            API.showToast(err.message);
         }
     },
 
@@ -138,9 +139,10 @@ const Dashboard = {
         if (!confirm('Deseja desativar esta conta?')) return;
         try {
             await API.request(`/banking/accounts/${id}`, { method: 'DELETE' });
+            API.showToast('Conta desativada com sucesso', 'success');
             await this.refresh();
         } catch (err) {
-            alert(err.message);
+            API.showToast(err.message);
         }
     },
 
@@ -186,10 +188,11 @@ const Dashboard = {
                     body: JSON.stringify(body)
                 });
 
+                API.showToast('Operação realizada com sucesso!', 'success');
                 this.closeModal();
                 await this.refresh();
             } catch (err) {
-                alert(err.message);
+                API.showToast(err.message);
             }
         };
     },

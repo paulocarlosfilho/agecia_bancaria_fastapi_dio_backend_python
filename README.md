@@ -47,6 +47,8 @@ Este projeto foi além dos requisitos básicos de um desafio técnico comum, imp
 | **Persistência** | Dados em memória (Dicionários) | **SQLAlchemy 2.0 + SQLite**: Banco de dados relacional real. |
 | **Documentação** | Swagger padrão e vazio | **Swagger Customizado**: Exemplos reais e tags organizadas. |
 | **Interface** | Apenas via Terminal/Postman | **Frontend Full Stack**: Dashboard moderno e responsivo. |
+| **UX & Erros** | Erros brutos (JSON) no alert() | **Toast System**: Notificações elegantes e erros formatados. |
+| **DevOps** | Execução manual (python main.py) | **Docker & Makefile**: Automação total do ambiente. |
 
 ---
 

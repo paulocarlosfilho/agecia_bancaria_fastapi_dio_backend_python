@@ -31,8 +31,6 @@
         <div class="mt-6 text-center">
             <p class="text-sm text-gray-600">Já tem uma conta? <a href="/login" class="text-blue-600 font-bold">Entrar</a></p>
         </div>
-        
-        <div id="msg" class="mt-4 p-3 rounded-lg text-sm hidden"></div>
     </div>
 </div>
 {% endblock %}
@@ -41,7 +39,6 @@
 <script>
     document.getElementById('register-form').onsubmit = async (e) => {
         e.preventDefault();
-        const msgDiv = document.getElementById('msg');
         
         try {
             await API.request('/users/', {
@@ -53,14 +50,10 @@
                 })
             });
             
-            msgDiv.textContent = 'Conta criada! Redirecionando...';
-            msgDiv.className = 'mt-4 p-3 bg-green-100 text-green-700 rounded-lg text-sm';
-            msgDiv.classList.remove('hidden');
+            API.showToast('Conta criada com sucesso! Redirecionando...', 'success');
             setTimeout(() => window.location.href = '/login', 2000);
         } catch (err) {
-            msgDiv.textContent = err.message;
-            msgDiv.className = 'mt-4 p-3 bg-red-100 text-red-700 rounded-lg text-sm';
-            msgDiv.classList.remove('hidden');
+            API.showToast(err.message);
         }
     };
 </script>

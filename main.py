@@ -1,7 +1,9 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, status
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, RedirectResponse, JSONResponse
+from fastapi.exceptions import RequestValidationError
+from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.middleware.cors import CORSMiddleware
 import os
 
@@ -57,6 +59,43 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
 )
+
+# Custom Exception Handlers for "Bonitinho" Errors
+@app.exception_handler(StarletteHTTPException)
+async def http_exception_handler(request: Request, exc: StarletteHTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content={
+            "success": False,
+            "error": {
+                "code": exc.status_code,
+                "message": exc.detail,
+                "type": "http_error"
+            }
+        },
+    )
+
+@app.exception_handler(RequestValidationError)
+async def validation_exception_handler(request: Request, exc: RequestValidationError):
+    errors = exc.errors()
+    # Format validation errors into a single readable string
+    messages = []
+    for error in errors:
+        loc = " -> ".join([str(x) for x in error["loc"][1:]])
+        msg = error["msg"]
+        messages.append(f"{loc}: {msg}" if loc else msg)
+    
+    return JSONResponse(
+        status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+        content={
+            "success": False,
+            "error": {
+                "code": 422,
+                "message": "Erro de validação: " + "; ".join(messages),
+                "type": "validation_error"
+            }
+        },
+    )
 
 # Templates
 templates = Jinja2Templates(directory="app/templates")

@@ -20,17 +20,6 @@ help:
 	@echo "  make test         - Executa os testes automatizados"
 	@echo "  make db-reset     - Apaga o banco de dados e reinicia do zero"
 
-# ... (outros comandos permanecem iguais)
-
-docker-build:
-	docker-compose build
-
-docker-up:
-	docker-compose up -d
-
-docker-down:
-	docker-compose down
-
 install:
 	$(PIP) install --upgrade -r requirements.txt
 
@@ -42,7 +31,20 @@ stop:
 	-taskkill /F /IM python.exe /T
 
 test:
-	$(PYTHON) tests/test_api.py
+	$(PYTHON) -m pytest
+
+# Docker Commands
+docker-build:
+	docker-compose build
+
+docker-up:
+	docker-compose up -d
+
+docker-down:
+	docker-compose down
+
+docker-logs:
+	docker-compose logs -f
 
 db-reset:
 	@echo "Resetando banco de dados..."
