@@ -1,11 +1,13 @@
 import httpx
 import asyncio
+import pytest
 import time
 
 BASE_URL = "http://127.0.0.1:8000/api/v1"
 
+@pytest.mark.asyncio
 async def test_flow():
-    print("Connecting to server...")
+    print("\nConnecting to server...")
     async with httpx.AsyncClient(timeout=30.0) as client:
         print("Registering user...")
         # 1. Register a user
@@ -130,7 +132,9 @@ async def test_flow():
         print(f"Status: {response.status_code}")
         print(f"Response: {response.json()}")
         assert response.status_code == 400
-        assert "Insufficient balance" in response.json()['detail']
+        # Updated to new "bonitinho" error format
+        error_msg = response.json().get('error', {}).get('message', '') or response.json().get('detail', '')
+        assert "Insufficient balance" in error_msg
 
         # 6.1 Transfer (Success)
         print("\n--- Testing Transfer (Success) ---")
