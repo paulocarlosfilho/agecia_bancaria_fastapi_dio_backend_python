@@ -1,0 +1,12 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body { font-family: 'Inter', sans-serif; }
+
+.glass { background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); }
+
+.gradient-bg { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+
+.card-shadow { box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1); }
+
+/* Transições suaves */
+.transition-all { transition: all 0.3s ease; }
