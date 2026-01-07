@@ -112,12 +112,33 @@ Se você tiver o Docker instalado, pode subir o sistema completo sem precisar co
     ```
     O sistema estará disponível no mesmo endereço: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-2.  **Parar os Containers**:
-    ```bash
-    make docker-down
-    ```
+114. **Parar os Containers**:
+115. ```bash
+116. make docker-down
+117. ```
 
-4.  **Documentação Técnica (Swagger)**:
+---
+
+## 🧪 Testes Automatizados
+
+O projeto conta com uma suíte de testes de integração que valida o fluxo completo da aplicação (**End-to-End**).
+
+### **O que é testado?**
+*   **Fluxo de Usuário**: Registro, login e obtenção de perfil.
+*   **Gestão de Contas**: Criação de contas (CC/CP) e atualização de apelidos.
+*   **Operações Bancárias**: Depósitos, saques (com validação de limites) e transferências entre contas.
+*   **Regras de Negócio**: Validação de saldo insuficiente, limites diários e contas inativas.
+
+### **Como rodar os testes**
+Certifique-se de que o servidor está rodando (`make run`) e execute:
+```bash
+make test
+```
+*Os testes utilizam **Pytest** com o plugin **pytest-asyncio** para garantir a integridade das operações assíncronas.*
+
+---
+
+120. **Documentação Técnica (Swagger)**:
     Explore todos os endpoints em: [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
 
 ---
@@ -155,6 +176,19 @@ O projeto adota uma arquitetura modular baseada em **Camadas (Layered Architectu
 ├── main.py             # Entry point e Handlers de Erros Globais
 └── Makefile            # Orquestração de tarefas e automação
 ```
+
+---
+
+## 🌐 Networking & Infraestrutura
+
+Para candidatos a vagas de **Redes e Infraestrutura**, este projeto demonstra competências além do código:
+
+*   **Containerização & Orquestração**: Uso de **Docker** e **Docker Compose** para criar ambientes isolados, gerenciando redes virtuais internas e exposição de portas.
+*   **Segurança de Rede (L7)**: Implementação de cabeçalhos de segurança, proteção contra CORS e autenticação baseada em tokens (JWT) para tráfego seguro.
+*   **Automação CI/CD (NetDevOps)**: Pipeline automatizado via **GitHub Actions** que valida a integridade do sistema a cada deploy, simulando um ambiente de integração contínua profissional.
+*   **Gerenciamento de Bindings**: Configuração de host e porta para escuta de serviços, essencial para entender como aplicações se comunicam em redes locais e externas.
+
+---
 
 ---
 *Desenvolvido como uma demonstração de excelência técnica em Python e Engenharia de Software.*
